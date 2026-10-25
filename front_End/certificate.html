@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate — Fest Admin 2025</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="certificate.css">
+
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">Fest Admin</a>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="payment.html">Payment</a></li>
+            <li><a href="certificate.html">Certificate</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><a href="register.html" class="nav-btn">Join Now</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-hero">
+        <h1>Your <span>Certificate</span></h1>
+        <p>Enter your details to view and download your certificate</p>
+    </div>
+
+    <div class="cert-section">
+        <div class="search-card">
+            <div class="form-group">
+                <label>Participant ID *</label>
+                <input type="number" id="participant_id" placeholder="Enter your Participant ID">
+            </div>
+            <button class="search-btn" onclick="fetchCertificate()">Get Certificate →</button>
+        </div>
+
+        <div class="certificate" id="certificateBox">
+            <div class="cert-logo">College Fest 2025</div>
+            <div class="cert-title">Certificate of Participation</div>
+            <div class="cert-decoration">🏆</div>
+            <div class="cert-heading">This is to certify that</div>
+            <div class="cert-name" id="certName">Participant Name</div>
+            <div class="cert-desc">has successfully participated in</div>
+            <div class="cert-event" id="certEvent">Event Name</div>
+            <div class="cert-desc" style="margin-top:1rem;" id="certDetails"></div>
+            <div class="cert-date" id="certDate">Issued on: —</div>
+            <br>
+            <button class="download-btn" onclick="window.print()">⬇ Download Certificate</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 <span>College Fest</span> — Made with ❤️ by the Organizing Committee</p>
+    </footer>
+
+    <script>
+        async function fetchCertificate() {
+            const participant_id = document.getElementById('participant_id').value;
+            if (!participant_id) { alert('Please enter your Participant ID!'); return; }
+
+            try {
+                const res = await fetch(`http://127.0.0.1:5000/certificates/participant/${participant_id}`);
+                const data = await res.json();
+
+                if (data.length === 0) {
+                    alert('No certificate found for this Participant ID!');
+                    return;
+                }
+
+                const cert = data[0];
+                document.getElementById('certName').textContent = 'Participant #' + cert.participant_id;
+                document.getElementById('certEvent').textContent = 'Event #' + cert.event_id;
+                document.getElementById('certDetails').textContent = cert.certificate_details || '';
+                document.getElementById('certDate').textContent = 'Issued on: ' + new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
+                document.getElementById('certificateBox').style.display = 'block';
+
+            } catch (err) {
+                alert('Error connecting to server. Make sure backend is running!');
+            }
+        }
+    </script>
+</body>
+
+</html>

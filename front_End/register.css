@@ -1,0 +1,61 @@
+ :root { --orange: #FF5722; --red: #E53935; --gold: #FFD700; --purple: #7B2FBE; --light-purple: #E8D5FF; --cream: #FFF8F0; --dark: #1A0A00; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 4rem; background: rgba(255,248,240,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,87,34,0.15); }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; background: linear-gradient(135deg, var(--orange), var(--red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+        nav ul { list-style: none; display: flex; gap: 2.5rem; }
+        nav ul a { text-decoration: none; color: var(--dark); font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
+        nav ul a:hover { color: var(--orange); }
+        .nav-btn { background: linear-gradient(135deg, var(--orange), var(--red)); color: white !important; padding: 0.6rem 1.5rem; border-radius: 50px; }
+
+        .page-hero { padding: 10rem 4rem 3rem; text-align: center; background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255,87,34,0.08) 0%, transparent 70%); }
+        .page-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; }
+        .page-hero h1 span { background: linear-gradient(135deg, var(--orange), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-hero p { color: #777; margin-top: 0.8rem; }
+
+        .form-section { padding: 3rem 4rem 6rem; max-width: 700px; margin: 0 auto; }
+
+        .form-card { background: white; border-radius: 24px; padding: 2.5rem; box-shadow: 0 8px 40px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.06); }
+
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; font-weight: 500; font-size: 0.9rem; margin-bottom: 0.5rem; color: #444; }
+        input, select {
+            width: 100%; padding: 0.85rem 1.2rem; border-radius: 12px;
+            border: 2px solid rgba(0,0,0,0.08); font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem; transition: border-color 0.2s; background: var(--cream);
+            outline: none;
+        }
+        input:focus, select:focus { border-color: var(--orange); background: white; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+
+        .submit-btn {
+            width: 100%; padding: 1rem; border-radius: 14px; border: none;
+            background: linear-gradient(135deg, var(--orange), var(--red));
+            color: white; font-family: 'DM Sans', sans-serif;
+            font-size: 1rem; font-weight: 600; cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(255,87,34,0.3);
+            margin-top: 0.5rem;
+        }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,87,34,0.4); }
+
+        .success-msg {
+            display: none; background: #E8F5E9; border: 1px solid #A5D6A7;
+            color: #2E7D32; padding: 1rem 1.5rem; border-radius: 12px;
+            margin-top: 1.5rem; text-align: center; font-weight: 500;
+        }
+
+        .divider { border: none; border-top: 1px solid rgba(0,0,0,0.08); margin: 1.5rem 0; }
+
+        .section-label {
+            font-family: 'Playfair Display', serif; font-size: 1.1rem;
+            font-weight: 700; margin-bottom: 1.2rem; color: var(--dark);
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+
+        footer { background: #0d0500; color: rgba(255,255,255,0.5); text-align: center; padding: 2rem; font-size: 0.85rem; }
+        footer span { background: linear-gradient(135deg, var(--orange), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 600; }
+
+        @media(max-width:768px) { nav { padding: 1rem 1.5rem; } nav ul { display: none; } .form-section { padding: 2rem 1.5rem 4rem; } .form-row { grid-template-columns: 1fr; } }

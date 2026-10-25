@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register — College Fest 2025</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="register.css">
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">Fest Admin</a>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="payment.html">Payment</a></li>
+            <li><a href="certificate.html">Certificate</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><a href="register.html" class="nav-btn">Join Now</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-hero">
+        <h1>Event <span>Registration</span></h1>
+        <p>Fill in your details to register for your favourite event</p>
+    </div>
+
+    <div class="form-section">
+        <div class="form-card">
+
+            <div class="section-label">👤 Personal Details</div>
+
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="name" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Contact Info *</label>
+                    <input type="text" id="contact_info" placeholder="Phone or Email">
+                </div>
+                <div class="form-group">
+                    <label>College Name</label>
+                    <input type="text" id="college" placeholder="Your college name">
+                </div>
+            </div>
+
+            <hr class="divider">
+            <div class="section-label">🎭 Event Details</div>
+
+            <div class="form-group">
+                <label>Select Event *</label>
+                <select id="event_id">
+                    <option value="">-- Choose an event --</option>
+                    <option value="1">Dance Competition — Oct 15 | ₹50</option>
+                    <option value="2">Football Tournament — Oct 16 | ₹100</option>
+                    <option value="3">Battle of Bands — Oct 17 | ₹75</option>
+                    <option value="4">Singing Contest — Oct 15 | ₹30</option>
+                    <option value="5">Cricket Match — Oct 16 | ₹100</option>
+                    <option value="6">Painting Competition — Oct 17 | ₹40</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Team Name (if applicable)</label>
+                <input type="text" id="team_name" placeholder="Enter team name (for group events)">
+            </div>
+
+            <button class="submit-btn" onclick="registerParticipant()">Register Now →</button>
+
+            <div class="success-msg" id="successMsg">
+                🎉 Registration successful! Proceed to <a href="payment.html" style="color:var(--orange);">Payment →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 <span>College Fest</span> — Made with ❤️ by the Organizing Committee</p>
+    </footer>
+
+    <script>
+        async function registerParticipant() {
+            const name = document.getElementById('name').value.trim();
+            const contact_info = document.getElementById('contact_info').value.trim();
+            const eventSelect = document.getElementById('event_id');
+            const event_id = eventSelect.value;
+            const event_name = eventSelect.selectedOptions[0].text;
+            const team_name = document.getElementById('team_name').value.trim();
+
+            if (!name || !contact_info || !event_id) {
+                alert('Please fill all required fields!');
+                return;
+            }
+
+            try {
+                // Step 1: Add participant
+                const partRes = await fetch('http://127.0.0.1:5000/participants', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, contact_info })
+                });
+
+                const partData = await partRes.json();
+                if (!partRes.ok) {
+                    throw new Error(partData.error || 'Could not create participant.');
+                }
+                console.log("Participant created:", partData);
+
+                // Step 2: Register for event
+                const regRes = await fetch('http://127.0.0.1:5000/registrations', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        participant_id: partData.id,
+                        event_id: parseInt(event_id),
+                        registration_date: new Date().toISOString().split('T')[0],
+                        team_name
+                    })
+                });
+
+                const regData = await regRes.json();
+                if (!regRes.ok) {
+                    throw new Error(regData.error || 'Could not complete registration.');
+                }
+                console.log("Registration result:", regData);
+
+                const btn = document.querySelector('.submit-btn');
+                btn.textContent = '✅ Registered!';
+                btn.style.background = 'linear-gradient(135deg, #4CAF50, #2E7D32)';
+                btn.disabled = true;
+
+                document.getElementById('successMsg').innerHTML = `🎉 Registration successful!<br>
+                    Event: <b>${event_name}</b><br>
+                    Participant ID: <b>${partData.id}</b><br>
+                    Registration ID: <b>${regData.id}</b><br>
+                    Proceed to <a href="payment.html" style="color:var(--orange);">Payment →</a>`;
+                document.getElementById('successMsg').style.display = 'block';
+                localStorage.setItem('participant_id', partData.id);
+                localStorage.setItem('registration_id', regData.id);
+                localStorage.setItem('event_id', event_id);
+
+            } catch (err) {
+                console.error("Error:", err);
+                alert('Error: ' + err.message);
+            }
+        }
+    </script>
+</body>
+
+</html>

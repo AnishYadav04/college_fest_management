@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — College Fest 2025</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">Fest Admin</a>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="payment.html">Payment</a></li>
+            <li><a href="certificate.html">Certificate</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><a href="register.html" class="nav-btn">Back to Site</a></li>
+        </ul>
+    </nav>
+
+    <div class="admin-layout">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-title">Dashboard</div>
+            <div class="sidebar-item active" onclick="showPanel('overview')"><span>📊</span> Overview</div>
+            <div class="sidebar-title" style="margin-top:1rem;">Manage</div>
+            <div class="sidebar-item" onclick="showPanel('participants')"><span>👤</span> Participants</div>
+            <div class="sidebar-item" onclick="showPanel('events')"><span>🎭</span> Events</div>
+            <div class="sidebar-item" onclick="showPanel('registrations')"><span>📋</span> Registrations</div>
+            <div class="sidebar-item" onclick="showPanel('payments')"><span>💳</span> Payments</div>
+            <div class="sidebar-item" onclick="showPanel('certificates')"><span>🏆</span> Certificates</div>
+            <div class="sidebar-title" style="margin-top:1rem;">Additional</div>
+            <div class="sidebar-item" onclick="showPanel('committees')"><span>👥</span> Committees</div>
+            <div class="sidebar-item" onclick="showPanel('sponsors')"><span>🤝</span> Sponsors</div>
+            <div class="sidebar-item" onclick="showPanel('judges')"><span>⚖️</span> Judges</div>
+            <div class="sidebar-title" style="margin-top:1rem;">Advanced</div>
+            <div class="sidebar-item" onclick="showPanel('advanced')"><span>🛠️</span> Advanced Tools</div>
+        </div>
+
+        <!-- MAIN -->
+        <div class="main-content">
+            <div class="admin-header">
+                <h1>Admin Panel</h1>
+                <p>Manage all College Fest data from here</p>
+            </div>
+
+            <!-- OVERVIEW PANEL -->
+            <div class="panel active" id="panel-overview">
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-card-num" id="totalParticipants">—</div>
+                        <div class="stat-card-label">Participants</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-num" id="totalEvents">—</div>
+                        <div class="stat-card-label">Events</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-num" id="totalRegistrations">—</div>
+                        <div class="stat-card-label">Registrations</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-num" id="totalPayments">—</div>
+                        <div class="stat-card-label">Payments</div>
+                    </div>
+                </div>
+                <p style="color:rgba(255,255,255,0.4); font-size:0.9rem;">Use the sidebar to manage each section.</p>
+            </div>
+
+            <!-- PARTICIPANTS PANEL -->
+            <div class="panel" id="panel-participants">
+                <div class="panel-title">👤 Participants <button class="load-btn" style="margin-left:auto;"
+                        onclick="loadParticipants()">Load Data</button></div>
+                <input type="text" id="searchParticipantInput" placeholder="Search by name, contact, or ID..."
+                    style="margin-bottom:15px; padding:8px 12px; width:100%; border-radius:6px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.05); color:white;"
+                    onkeyup="searchParticipants()">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Contact Info</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="participantsBody">
+                        <tr>
+                            <td colspan="4" class="empty-msg">Click "Load Data" to fetch</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- EVENTS PANEL -->
+            <div class="panel" id="panel-events">
+                <div class="panel-title">🎭 Events <button class="load-btn" style="margin-left:auto;"
+                        onclick="loadEvents()">Load Data</button></div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Event Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Venue</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventsBody">
+                        <tr>
+                            <td colspan="5" class="empty-msg">Click "Load Data" to fetch</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- REGISTRATIONS PANEL -->
+            <div class="panel" id="panel-registrations">
+                <div class="panel-title">📋 Registrations <button class="load-btn" style="margin-left:auto;"
+                        onclick="loadRegistrations()">Load Data</button></div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Participant</th>
+                            <th>Event</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Team</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="registrationsBody">
+                        <tr>
+                            <td colspan="7" class="empty-msg">Click "Load Data" to fetch</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- PAYMENTS PANEL -->
+            <div class="panel" id="panel-payments">
+                <div class="panel-title">💳 Payments <button class="load-btn" style="margin-left:auto;"
+                        onclick="loadPayments()">Load Data</button></div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Registration</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentsBody">
+                        <tr>
+                            <td colspan="6" class="empty-msg">Click "Load Data" to fetch</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CERTIFICATES PANEL -->
+            <div class="panel" id="panel-certificates">
+                <div class="panel-title">🏆 Certificates <button class="load-btn" style="margin-left:auto;"
+                        onclick="loadCertificates()">Load Data</button></div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Participant</th>
+                            <th>Event</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="certificatesBody">
+                        <tr>
+                            <td colspan="4" class="empty-msg">Click "Load Data" to fetch</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- COMMITTEES PANEL -->
+            <div class="panel" id="panel-committees">
+                <div class="panel-title">👥 Committees <button class="load-btn" style="margin-left:auto;"
+                        onclick="loadCommittees()">Load Data</button></div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Head Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Department</th>
+                        </tr>
+                    </thead>
+                    <tbody id="committeesBody">
+                        <tr>
+                            <td colspan="5" class="empty-msg">Click "Load Data" to fetch</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SPONSORS PANEL -->
+            <div class="panel" id="panel-sponsors">
+                <div class="panel-title">🤝 Sponsors <button class="load-btn" style="margin-left:auto;"
+                        onclick="loadSponsors()">Load Data</button></div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Contact Info</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sponsorsBody">
+                        <tr>
+                            <td colspan="3" class="empty-msg">Click "Load Data" to fetch</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- JUDGES PANEL -->
+            <div class="panel" id="panel-judges">
+                <div class="panel-title">⚖️ Judges <button class="load-btn" style="margin-left:auto;"
+                        onclick="loadJudges()">Load Data</button></div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Contact Info</th>
+                        </tr>
+                    </thead>
+                    <tbody id="judgesBody">
+                        <tr>
+                            <td colspan="3" class="empty-msg">Click "Load Data" to fetch</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ADVANCED TOOLS PANEL -->
+            <div class="panel" id="panel-advanced">
+                <div class="panel-title">🛠️ Advanced Tools</div>
+                <p style="color:#aaa; font-size:0.95rem; margin-bottom: 20px;">Use these tools to find duplicate
+                    participations and merge records.</p>
+
+                <div
+                    style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h3 style="margin-top: 0;">Find Common Matches / Duplicates</h3>
+                    <p style="font-size: 0.9rem; color: #ccc;">Find participants with identical names or contact info to
+                        clean up the database.</p>
+                    <button class="load-btn" onclick="findDuplicates()">Find Duplicates</button>
+                    <div id="duplicatesResult" style="margin-top: 15px;"></div>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
+                    <h3 style="margin-top: 0;">Merge Participations</h3>
+                    <p style="font-size: 0.9rem; color: #ccc;">Merge two participant IDs. Registrations, payments, and
+                        certificates from the old ID will be transferred to the primary ID, and the old ID will be
+                        deleted.</p>
+                    <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                        <input type="number" id="primaryId" placeholder="Primary ID (to keep)"
+                            style="padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px;">
+                        <input type="number" id="oldId" placeholder="Old ID (to merge & delete)"
+                            style="padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px;">
+                        <button class="load-btn" style="background: linear-gradient(135deg, #e53935, #c62828);"
+                            onclick="mergeParticipants()">Merge Records</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API = 'http://127.0.0.1:5000';
+
+        function showPanel(name) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+            document.getElementById('panel-' + name).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function badgeHtml(status) {
+            const cls = status === 'Confirmed' ? 'badge-confirmed' : status === 'Cancelled' ? 'badge-cancelled' : 'badge-pending';
+            return `<span class="badge ${cls}">${status}</span>`;
+        }
+
+        async function loadOverview() {
+            try {
+                const [p, e, r, pay] = await Promise.all([
+                    fetch(`${API}/participants`).then(r => r.json()),
+                    fetch(`${API}/events`).then(r => r.json()),
+                    fetch(`${API}/registrations`).then(r => r.json()),
+                    fetch(`${API}/payments`).then(r => r.json())
+                ]);
+                document.getElementById('totalParticipants').textContent = p.length;
+                document.getElementById('totalEvents').textContent = e.length;
+                document.getElementById('totalRegistrations').textContent = r.length;
+                document.getElementById('totalPayments').textContent = pay.length;
+            } catch (err) { console.log('Backend not connected'); }
+        }
+
+        let allParticipants = [];
+        async function loadParticipants() {
+            const res = await fetch(`${API}/participants`);
+            allParticipants = await res.json();
+            renderParticipants(allParticipants);
+        }
+
+        function renderParticipants(data) {
+            document.getElementById('participantsBody').innerHTML = data.length === 0
+                ? '<tr><td colspan="4" class="empty-msg">No participants yet</td></tr>'
+                : data.map(p => `<tr>
+            <td>${p.participant_id}</td>
+            <td>${p.name}</td>
+            <td>${p.contact_info}</td>
+            <td>
+                <button class="load-btn" style="padding:4px 8px; font-size:0.8rem; margin-right:5px; background:var(--purple);" onclick="viewParticipant(${p.participant_id})">View</button>
+                <button class="load-btn" style="padding:4px 8px; font-size:0.8rem; margin-right:5px;" onclick="editParticipant(${p.participant_id}, '${p.name.replace(/'/g, "\\'")}', '${(p.contact_info || '').replace(/'/g, "\\'")}')">Edit</button>
+                <button class="load-btn" style="padding:4px 8px; font-size:0.8rem; background:var(--red);" onclick="deleteParticipant(${p.participant_id})">Delete</button>
+            </td>
+        </tr>`).join('');
+        }
+
+        function searchParticipants() {
+            const term = document.getElementById('searchParticipantInput').value.toLowerCase();
+            const filtered = allParticipants.filter(p =>
+                (p.name && p.name.toLowerCase().includes(term)) ||
+                (p.contact_info && p.contact_info.toLowerCase().includes(term)) ||
+                (p.participant_id && p.participant_id.toString().includes(term))
+            );
+            renderParticipants(filtered);
+        }
+
+        async function loadEvents() {
+            const res = await fetch(`${API}/events`);
+            const data = await res.json();
+            document.getElementById('eventsBody').innerHTML = data.length === 0
+                ? '<tr><td colspan="5" class="empty-msg">No events yet</td></tr>'
+                : data.map(e => `<tr><td>${e.event_id}</td><td>${e.event_name}</td><td>${e.event_date}</td><td>${e.event_time}</td><td>${e.venue}</td></tr>`).join('');
+        }
+
+        let allRegistrations = [];
+        async function loadRegistrations() {
+            const res = await fetch(`${API}/registrations`);
+            allRegistrations = await res.json();
+            renderRegistrations(allRegistrations);
+        }
+
+        function renderRegistrations(data) {
+            document.getElementById('registrationsBody').innerHTML = data.length === 0
+                ? '<tr><td colspan="7" class="empty-msg">No registrations yet</td></tr>'
+                : data.map(r => `<tr>
+            <td>${r.registration_id}</td>
+            <td>${r.participant_name ? r.participant_name + ' (ID: ' + r.participant_id + ')' : r.participant_id}</td>
+            <td>${r.event_name ? r.event_name + ' (ID: ' + r.event_id + ')' : r.event_id}</td>
+            <td>${r.registration_date}</td>
+            <td>${badgeHtml(r.registration_status)}</td>
+            <td>${r.team_name || '—'}</td>
+            <td>
+                <button class="load-btn" style="padding:4px 8px; font-size:0.8rem; margin-right:5px; background:var(--purple);" onclick="viewRegistration(${r.registration_id})">View</button>
+                <button class="load-btn" style="padding:4px 8px; font-size:0.8rem; margin-right:5px;" onclick="editRegistration(${r.registration_id}, '${r.registration_status}')">Edit Status</button>
+                <button class="load-btn" style="padding:4px 8px; font-size:0.8rem; background:var(--red);" onclick="deleteRegistration(${r.registration_id})">Delete</button>
+            </td>
+        </tr>`).join('');
+        }
+
+        async function loadPayments() {
+            const res = await fetch(`${API}/payments`);
+            const data = await res.json();
+            document.getElementById('paymentsBody').innerHTML = data.length === 0
+                ? '<tr><td colspan="6" class="empty-msg">No payments yet</td></tr>'
+                : data.map(p => `<tr><td>${p.payment_id}</td><td>${p.registration_id}</td><td>₹${p.amount}</td><td>${p.payment_method}</td><td>${badgeHtml(p.payment_status)}</td><td>${p.payment_date}</td></tr>`).join('');
+        }
+
+        async function loadCertificates() {
+            const res = await fetch(`${API}/certificates`);
+            const data = await res.json();
+            document.getElementById('certificatesBody').innerHTML = data.length === 0
+                ? '<tr><td colspan="4" class="empty-msg">No certificates yet</td></tr>'
+                : data.map(c => `<tr><td>${c.certificate_id}</td><td>${c.participant_id}</td><td>${c.event_id}</td><td>${c.certificate_details || '—'}</td></tr>`).join('');
+        }
+
+        async function loadCommittees() {
+            const res = await fetch(`${API}/committees`);
+            const data = await res.json();
+            document.getElementById('committeesBody').innerHTML = data.length === 0
+                ? '<tr><td colspan="5" class="empty-msg">No committees yet</td></tr>'
+                : data.map(c => `<tr><td>${c.committee_id}</td><td>${c.head_name}</td><td>${c.email}</td><td>${c.phone_number}</td><td>${c.team_dept}</td></tr>`).join('');
+        }
+
+        async function loadSponsors() {
+            const res = await fetch(`${API}/sponsors`);
+            const data = await res.json();
+            document.getElementById('sponsorsBody').innerHTML = data.length === 0
+                ? '<tr><td colspan="3" class="empty-msg">No sponsors yet</td></tr>'
+                : data.map(s => `<tr><td>${s.sponsor_id}</td><td>${s.name}</td><td>${s.contact_info}</td></tr>`).join('');
+        }
+
+        async function loadJudges() {
+            const res = await fetch(`${API}/judges`);
+            const data = await res.json();
+            document.getElementById('judgesBody').innerHTML = data.length === 0
+                ? '<tr><td colspan="3" class="empty-msg">No judges yet</td></tr>'
+                : data.map(j => `<tr><td>${j.judge_id}</td><td>${j.name}</td><td>${j.contact_info}</td></tr>`).join('');
+        }
+
+        async function findDuplicates() {
+            document.getElementById('duplicatesResult').innerHTML = '<p>Loading...</p>';
+            try {
+                const res = await fetch(`${API}/admin/duplicates`);
+                const data = await res.json();
+                if (data.length === 0) {
+                    document.getElementById('duplicatesResult').innerHTML = '<p style="color: #4CAF50;">No duplicates found.</p>';
+                } else {
+                    let html = '<table class="data-table"><thead><tr><th>Name/Contact</th><th>Matched IDs</th></tr></thead><tbody>';
+                    data.forEach(d => {
+                        html += `<tr><td>${d.name} (${d.contact_info})</td><td>${d.ids}</td></tr>`;
+                    });
+                    html += '</tbody></table>';
+                    document.getElementById('duplicatesResult').innerHTML = html;
+                }
+            } catch (err) {
+                document.getElementById('duplicatesResult').innerHTML = '<p style="color: #e53935;">Error loading duplicates.</p>';
+            }
+        }
+
+        async function mergeParticipants() {
+            const primaryId = document.getElementById('primaryId').value;
+            const oldId = document.getElementById('oldId').value;
+            if (!primaryId || !oldId || primaryId === oldId) {
+                alert('Please enter valid, distinct primary and old IDs.');
+                return;
+            }
+            if (confirm(`Are you sure you want to merge ID ${oldId} into ID ${primaryId}? This cannot be undone.`)) {
+                try {
+                    const res = await fetch(`${API}/admin/merge`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ primaryId, oldId })
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                        alert('Merge successful: ' + data.message);
+                        loadOverview();
+                    } else {
+                        alert('Merge failed: ' + data.error);
+                    }
+                } catch (err) {
+                    alert('Error executing merge.');
+                }
+            }
+        }
+
+        // --- View Operations ---
+        function viewParticipant(id) {
+            const p = allParticipants.find(x => x.participant_id === id);
+            if (p) {
+                alert(`Participant Details:\n\nID: ${p.participant_id}\nName: ${p.name}\nContact: ${p.contact_info || 'N/A'}`);
+            }
+        }
+        function viewRegistration(id) {
+            const r = allRegistrations.find(x => x.registration_id === id);
+            if (r) {
+                alert(`Registration Details:\n\nReg ID: ${r.registration_id}\nParticipant: ${r.participant_name} (ID: ${r.participant_id})\nEvent: ${r.event_name} (ID: ${r.event_id})\nDate: ${r.registration_date}\nStatus: ${r.registration_status}\nTeam: ${r.team_name || 'N/A'}`);
+            }
+        }
+
+        // --- CRUD Operations ---
+
+        async function editParticipant(id, oldName, oldContact) {
+            const newName = prompt("Enter new name:", oldName);
+            if (newName === null) return;
+            const newContact = prompt("Enter new contact info:", oldContact);
+            if (newContact === null) return;
+
+            try {
+                const res = await fetch(`${API}/participants/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: newName, contact_info: newContact })
+                });
+                if (res.ok) {
+                    loadParticipants();
+                } else {
+                    alert('Error updating participant');
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+
+        async function deleteParticipant(id) {
+            if (!confirm('Are you sure you want to delete participant ' + id + '?')) return;
+            try {
+                const res = await fetch(`${API}/participants/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    loadParticipants();
+                    loadOverview();
+                } else {
+                    const errData = await res.json();
+                    alert('Error deleting participant: ' + errData.error);
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+
+        async function editRegistration(id, oldStatus) {
+            const statuses = ['Pending', 'Confirmed', 'Cancelled'];
+            const newStatus = prompt(`Enter new status (${statuses.join(', ')}):`, oldStatus);
+            if (newStatus === null) return;
+            if (!statuses.includes(newStatus)) {
+                alert('Invalid status. Please enter Pending, Confirmed, or Cancelled.');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API}/registrations/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ registration_status: newStatus })
+                });
+                if (res.ok) {
+                    loadRegistrations();
+                } else {
+                    alert('Error updating registration status');
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+
+        async function deleteRegistration(id) {
+            if (!confirm('Are you sure you want to delete registration ' + id + '?')) return;
+            try {
+                const res = await fetch(`${API}/registrations/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    loadRegistrations();
+                    loadOverview();
+                } else {
+                    const errData = await res.json();
+                    alert('Error deleting registration: ' + errData.error);
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+
+        // Load overview stats on page load
+        loadOverview();
+    </script>
+</body>
+
+</html>
